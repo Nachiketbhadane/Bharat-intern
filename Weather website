@@ -1,0 +1,87 @@
+html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div class="weather">
+            <h2>Current Weather</h2>
+            <div id="weather-data">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+css
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.weather {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.weather h2 {
+    margin-top: 0;
+}
+
+.weather p {
+    margin: 0;
+}
+
+
+Javascript 
+
+document.addEventListener("DOMContentLoaded", function() {
+    const apiKey = "YOUR_API_KEY"; // Replace with your API key
+    const apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=YOUR_CITY&units=metric&appid=" + apiKey; // Replace YOUR_CITY with your city
+    
+    fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            displayWeather(data);
+        })
+        .catch(error => {
+            console.error("There was a problem fetching the weather data:", error);
+        });
+
+    function displayWeather(data) {
+        const weatherData = `
+            <p>Temperature: ${data.main.temp} °C</p>
+            <p>Description: ${data.weather[0].description}</p>
+            <p>Humidity: ${data.main.humidity} %</p>
+            <p>Wind Speed: ${data.wind.speed} m/s</p>
+        `;
+        document.getElementById("weather-data").innerHTML = weatherData;
+    }
+});
